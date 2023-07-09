@@ -39,14 +39,43 @@ print(testurl)
 
 test_result=fetch_inspirehep_papers(testurl)
 
-#print(type(test_result))
+with open('test.json') as f:
+    data = json.load(f)
+
 
 json_str = '{"test": 123}'
+#json_dict = data 
 json_dict = json.loads(test_result)
 
-print(json_dict["hits"]["hits"][0].keys())
-print(type(json_dict))
-print(type(json_dict["hits"]["hits"][0]['metadata']['authors']))
+n_paper=len(json_dict["hits"]["hits"])
+print("number of citations are "+str(n_paper) +" in the last 7 days")
+
+for i in range(n_paper):
+    title_0th =json_dict["hits"]["hits"][i]['metadata']['titles'][0]['title']
+    id_0th =json_dict["hits"]["hits"][i]['id']
+    print("")
+    print("Title: "+title_0th)
+    print("Link: https://inspirehep.net/literature/"+id_0th)
+    author_full_names = [author['full_name'] for author in json_dict["hits"]["hits"][i]['metadata']['authors']]
+    print(author_full_names)
+    
+
+title_0th =json_dict["hits"]["hits"][0]['metadata']['titles'][0]['title']
+id_0th =json_dict["hits"]["hits"][0]['id']
+print("")
+print("Title: "+title_0th)
+print("Link: https://inspirehep.net/literature/"+id_0th)
+author_full_names = [author['full_name'] for author in json_dict["hits"]["hits"][0]['metadata']['authors']]
+print(author_full_names)
+print("citing ref")
+print(author_full_names)
+
+#authors_0th =
+#link_0th =
+#mypaper_0th =
+
+#print(type(json_dict))
+#print(type(json_dict["hits"]["hits"][0]['metadata']['titles'].keys()))
 
 #To do for output: Extract json output in a favored way, e.g. title of the citing paper, cite papers of mine
 #To do for query: (1) limit by updated dates (e.g. last week, month); exclude big papers from my paper list. 
