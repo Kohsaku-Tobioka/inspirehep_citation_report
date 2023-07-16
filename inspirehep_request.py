@@ -42,29 +42,18 @@ json_dict = json.loads(test_result)
 #     data = json.load(f)
 #json_dict = data 
 
-n_paper=len(json_dict["hits"]["hits"])
+references = json_dict["hits"]["hits"]
+n_paper=len(references)
 print("number of citations are "+str(n_paper) +" in the last 7 days")
 
-for i in range(n_paper):
-    title_0th =json_dict["hits"]["hits"][i]['metadata']['titles'][0]['title']
-    id_0th =json_dict["hits"]["hits"][i]['id']
+for reference in references:
+    title = reference['metadata']['titles'][0]['title']
+    id = reference['id']
     print("")
-    print("Title: "+title_0th)
-    print("Link: https://inspirehep.net/literature/"+id_0th)
-    author_full_names = [author['full_name'] for author in json_dict["hits"]["hits"][i]['metadata']['authors']]
+    print("Title: "+title)
+    print("Link: https://inspirehep.net/literature/"+id)
+    author_full_names = [author['full_name'] for author in reference['metadata']['authors']]
     print(author_full_names)
-    
-
-title_0th =json_dict["hits"]["hits"][0]['metadata']['titles'][0]['title']
-id_0th =json_dict["hits"]["hits"][0]['id']
-print("")
-print("Title: "+title_0th)
-print("Link: https://inspirehep.net/literature/"+id_0th)
-author_full_names = [author['full_name'] for author in json_dict["hits"]["hits"][0]['metadata']['authors']]
-print(author_full_names)
-print("citing ref")
-print(author_full_names)
-
 
 
 #To do for output: Extract json output in a favored way, e.g. title of the citing paper, cite papers of mine
