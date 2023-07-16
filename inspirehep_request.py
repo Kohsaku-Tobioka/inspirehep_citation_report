@@ -18,7 +18,6 @@ def create_query_url(search_query, max_results=10, page=1, sort_order='mostrecen
     max_results = f'size={max_results}'
     page = f'page={page}'
     sort_order = f'sortOrder={sort_order}'
-    #dates='du%20>%202022-06-30'
     day_start=(datetime.date.today() - datetime.timedelta(days=pastdays)).strftime("%Y-%m-%d")
     dates=f'du%20>%20{day_start}'
 
@@ -33,49 +32,41 @@ def fetch_inspirehep_papers(url):
     else:
         raise Exception(f"Failed to fetch papers: {response.status_code}")
     
-testurl=create_query_url("de%20%3E%202020%20and%20refersto%3Aauthor%3AK.Tobioka.1")
-print(testurl)
+# testurl=create_query_url("de%20%3E%202020%20and%20refersto%3Aauthor%3AK.Tobioka.1")
+# print(testurl)
 
+# test_result=fetch_inspirehep_papers(testurl)
+# json_dict = json.loads(test_result)
 
-test_result=fetch_inspirehep_papers(testurl)
+# references = json_dict["hits"]["hits"]
+# n_paper=len(references)
+# print("number of citations are "+str(n_paper) +" in the last 7 days")
 
+########
+# Use local file for test
 with open('test.json') as f:
     data = json.load(f)
 
+json_dict = data 
+references = json_dict["hits"]["hits"]
+########
 
-json_str = '{"test": 123}'
-#json_dict = data 
-json_dict = json.loads(test_result)
+# 飛岡の論文を引用している論文を調べるコード
+# for reference in references:
+#     title = reference['metadata']['titles'][0]['title']
+#     id = reference['id']
+#     print("")
+#     print("Title: "+title)
+#     print("Link: https://inspirehep.net/literature/"+id)
+#     author_full_names = [author['full_name'] for author in reference['metadata']['authors']]
+#     print(author_full_names)
 
-n_paper=len(json_dict["hits"]["hits"])
-print("number of citations are "+str(n_paper) +" in the last 7 days")
-
-for i in range(n_paper):
-    title_0th =json_dict["hits"]["hits"][i]['metadata']['titles'][0]['title']
-    id_0th =json_dict["hits"]["hits"][i]['id']
-    print("")
-    print("Title: "+title_0th)
-    print("Link: https://inspirehep.net/literature/"+id_0th)
-    author_full_names = [author['full_name'] for author in json_dict["hits"]["hits"][i]['metadata']['authors']]
-    print(author_full_names)
-    
-
-title_0th =json_dict["hits"]["hits"][0]['metadata']['titles'][0]['title']
-id_0th =json_dict["hits"]["hits"][0]['id']
-print("")
-print("Title: "+title_0th)
-print("Link: https://inspirehep.net/literature/"+id_0th)
-author_full_names = [author['full_name'] for author in json_dict["hits"]["hits"][0]['metadata']['authors']]
-print(author_full_names)
-print("citing ref")
-print(author_full_names)
-
-#authors_0th =
-#link_0th =
-#mypaper_0th =
-
-#print(type(json_dict))
-#print(type(json_dict["hits"]["hits"][0]['metadata']['titles'].keys()))
+# 実際に引用されている飛岡の論文がどれかを調べるコード
+for ref in references[1]["metadata"]["references"]:
+    # Some reference info does not include "authors" key
+    if ref["reference"].get("authors"):
+        if "Tobioka, K." in [author["full_name"] for author in ref["reference"]["authors"]]:
+            print(ref["raw_refs"][0]["value"])
 
 #To do for output: Extract json output in a favored way, e.g. title of the citing paper, cite papers of mine
 #To do for query: (1) limit by updated dates (e.g. last week, month); exclude big papers from my paper list. 
