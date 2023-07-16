@@ -18,7 +18,6 @@ def create_query_url(search_query, max_results=10, page=1, sort_order='mostrecen
     max_results = f'size={max_results}'
     page = f'page={page}'
     sort_order = f'sortOrder={sort_order}'
-    #dates='du%20>%202022-06-30'
     day_start=(datetime.date.today() - datetime.timedelta(days=pastdays)).strftime("%Y-%m-%d")
     dates=f'du%20>%20{day_start}'
 
@@ -36,16 +35,12 @@ def fetch_inspirehep_papers(url):
 testurl=create_query_url("de%20%3E%202020%20and%20refersto%3Aauthor%3AK.Tobioka.1")
 print(testurl)
 
-
 test_result=fetch_inspirehep_papers(testurl)
-
-with open('test.json') as f:
-    data = json.load(f)
-
-
-json_str = '{"test": 123}'
-#json_dict = data 
 json_dict = json.loads(test_result)
+
+# with open('test.json') as f:
+#     data = json.load(f)
+#json_dict = data 
 
 n_paper=len(json_dict["hits"]["hits"])
 print("number of citations are "+str(n_paper) +" in the last 7 days")
@@ -70,12 +65,7 @@ print(author_full_names)
 print("citing ref")
 print(author_full_names)
 
-#authors_0th =
-#link_0th =
-#mypaper_0th =
 
-#print(type(json_dict))
-#print(type(json_dict["hits"]["hits"][0]['metadata']['titles'].keys()))
 
 #To do for output: Extract json output in a favored way, e.g. title of the citing paper, cite papers of mine
 #To do for query: (1) limit by updated dates (e.g. last week, month); exclude big papers from my paper list. 
