@@ -31,7 +31,21 @@ def fetch_inspirehep_papers(url):
         return response.text
     else:
         raise Exception(f"Failed to fetch papers: {response.status_code}")
-    
+
+# 実際に引用されている飛岡の論文がどれかを調べるコード
+def readout_citedpaper(reference,Name):
+    output_myref =[]
+    for ref in reference["metadata"]["references"]:
+        # Some reference info does not include "authors" key
+        if ref["reference"].get("authors"):
+            if Name in [author["full_name"] for author in ref["reference"]["authors"]]:
+                #print(ref["raw_refs"][0]["value"])
+                output_myref.append(ref["raw_refs"][0]["value"])
+    if output_myref ==[]:
+        print(Name+" not found. Possibly a big collaboration paper. ")
+    else: 
+        print(output_myref)
+
 # testurl=create_query_url("de%20%3E%202020%20and%20refersto%3Aauthor%3AK.Tobioka.1")
 # print(testurl)
 
@@ -39,35 +53,43 @@ def fetch_inspirehep_papers(url):
 # json_dict = json.loads(test_result)
 
 # references = json_dict["hits"]["hits"]
-# n_paper=len(references)
-# print("number of citations are "+str(n_paper) +" in the last 7 days")
 
 ########
 # Use local file for test
-with open('test.json') as f:
+with open('test2.json') as f:
     data = json.load(f)
 
 json_dict = data 
 references = json_dict["hits"]["hits"]
 ########
 
-# 飛岡の論文を引用している論文を調べるコード
-# for reference in references:
-#     title = reference['metadata']['titles'][0]['title']
-#     id = reference['id']
-#     print("")
-#     print("Title: "+title)
-#     print("Link: https://inspirehep.net/literature/"+id)
-#     author_full_names = [author['full_name'] for author in reference['metadata']['authors']]
-#     print(author_full_names)
+n_paper=len(references)
+print("Number of citations are "+str(n_paper) +" in the last 7 days")
 
-# 実際に引用されている飛岡の論文がどれかを調べるコード
-for ref in references[1]["metadata"]["references"]:
-    # Some reference info does not include "authors" key
-    if ref["reference"].get("authors"):
-        if "Tobioka, K." in [author["full_name"] for author in ref["reference"]["authors"]]:
-            print(ref["raw_refs"][0]["value"])
+
+
+# 飛岡の論文を引用している論文を調べるコード
+i=1
+for reference in references:
+    title = reference['metadata']['titles'][0]['title']
+    id = reference['id']
+    print("Ref"+str(i))
+    print("Title: "+title)
+    print("Link: https://inspirehep.net/literature/"+id)
+    author_full_names = [author['full_name'] for author in reference['metadata']['authors']]
+    print(author_full_names)
+    readout_citedpaper(reference,"Tobioka, K.")
+    i += 1
+
+
+
 
 #To do for output: Extract json output in a favored way, e.g. title of the citing paper, cite papers of mine
 #To do for query: (1) limit by updated dates (e.g. last week, month); exclude big papers from my paper list. 
 # Implement it in Javascript and appscript. 
+
+# i=1
+# for referece in references:
+#     print("Ref"+str(i))
+#     readout_citedpaper(referece,"Tobioka, K.")
+#     i +=1
