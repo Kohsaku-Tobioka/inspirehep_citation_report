@@ -28,8 +28,16 @@ def readout_citedpaper(reference,Name):
     for ref in reference["metadata"]["references"]:
         if ref["reference"].get("authors"):
             if Name in [author["full_name"] for author in ref["reference"]["authors"]]:
-                output_myref.append(ref["raw_refs"][0]["value"])
-    
+                if ref["reference"].get('title'): 
+                    output_myref.append("["+ref["reference"]["label"]+"]")
+                    output_myref.append(ref["reference"]["title"]["title"])
+                elif ref.get("raw_refs"):
+                    output_myref.append(ref["raw_refs"][0]["value"])
+                else:
+                    output_myref.append("reference-title or raw_refs not found")
+                
+
+                
     return output_myref
 
 
@@ -60,9 +68,9 @@ def process_references(references):
 def main():
     search_query = "de%20%3E%202020%20and%20refersto%3Aauthor%3AK.Tobioka.1"
     url = create_query_url(search_query)
-    result = fetch_inspirehep_papers(url)
-    json_dict = json.loads(result)
-    #references = json_dict["hits"]["hits"]
+    # result = fetch_inspirehep_papers(url)
+    # json_dict = json.loads(result)
+    # #references = json_dict["hits"]["hits"]
     ########
     # Use local file for test
     with open('test2.json') as f:
@@ -76,3 +84,11 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+#issue 1: 
+# Ref 7 has strange input in the "raw_refs". 
+# Instead of reading this, read "title" and "label". 
+
+#issue 2:
+#check search query. Strange refereces are included. 
+# Also check if the date range works. 
