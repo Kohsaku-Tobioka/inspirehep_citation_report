@@ -52,8 +52,14 @@ def process_references(references):
         print("\nRef"+str(i))
         print("Title: "+title)
         print("Link: https://inspirehep.net/literature/"+id)
-        author_full_names = [author['full_name'] for author in reference['metadata']['authors']] #fix next time
-        print("Authors: ", author_full_names)
+        if reference['metadata'].get('authors'):
+            author_full_names = [author['full_name'] for author in reference['metadata']['authors']] #fix next time
+            print("Authors: ", author_full_names)
+        elif reference['metadata'].get('corporate_author'):
+            print("Corporate_author: ", reference['metadata']['corporate_author'])
+        else:
+            print('keys: authors/corporate_author not found')
+
         cited_refs = readout_citedpaper(reference,"Tobioka, K.")
         
         if cited_refs ==[]:
@@ -69,17 +75,18 @@ def main():
     search_query = "de%20%3E%202020%20and%20refersto%3Aauthor%3AK.Tobioka.1"
     url = create_query_url(search_query)
     result = fetch_inspirehep_papers(url)
-    json_dict = json.loads(result)
-    references = json_dict["hits"]["hits"]
+    #json_dict = json.loads(result)
+    #references = json_dict["hits"]["hits"]
+    
     # Save json_dict to a file
     #with open('output.json', 'w') as json_file:
     #    json.dump(json_dict, json_file, indent=4)
     ########
     # Use local file for test
-    #with open('test2.json') as f:
-    #    data = json.load(f)
-    #json_dict = data 
-    #references = json_dict["hits"]["hits"]
+    with open('test_2023-08-13.json') as f:
+        data = json.load(f)
+    json_dict = data 
+    references = json_dict["hits"]["hits"]
     ########
 
     process_references(references)
