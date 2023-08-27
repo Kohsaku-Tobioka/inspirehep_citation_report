@@ -99,17 +99,5 @@ if __name__ == "__main__":
     main()
 
 
-#issue1: Search query & API issue
-# picks up old papers like 2022 even if the last 7 days was supposed to be searched. 
-# Is query "mostrecent" an issue? Is filtering the last xx days working? How the date restriction work?
-# 
-#Is should pick up as in 
-# https://inspirehep.net/authors/1198400?ui-citation-summary=true&ui-exclude-self-citations=true
-
-# issue2  The following one appears, but I can't find my paper in their reference (check the paper more detail)
-# Ref98
-# Title: Gauge/string duality for strong interactions
-# Link: https://inspirehep.net/literature/2149295
-# Authors:  ['Rigatos, Konstantinos Christos']
-# Cited ref:  Tobioka, K. not found. Possibly a big collaboration paper.
-# 
+#to do
+# de%20>%... query order matters? Clean up this part nex time. 
