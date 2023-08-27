@@ -2,13 +2,13 @@ import datetime
 import requests
 import json
 
-
-def create_query_url(search_query, max_results=10, page=1, sort_order='mostrecent', pastdays=7):
+#https://inspirehep.net/authors/1198400?ui-citation-summary=true&ui-exclude-self-citations=true
+def create_query_url(search_query, max_results=10, page=1, sort_order='mostrecent', pastdays=30):
     base_url = 'https://inspirehep.net/api/literature?'
     query = f'q={search_query}'
     max_results = f'size={max_results}'
     page = f'page={page}'
-    sort_order = f'sortOrder={sort_order}'
+    sort_order = f'sort={sort_order}'
     day_start=(datetime.date.today() - datetime.timedelta(days=pastdays)).strftime("%Y-%m-%d")
     dates=f'du%20>%20{day_start}'
     url = f'{base_url}{query}&{max_results}&{page}&{sort_order}&{dates}'
@@ -21,6 +21,7 @@ def fetch_inspirehep_papers(url):
         return response.text
     else:
         raise Exception(f"Failed to fetch papers: {response.status_code}")
+
 
 
 def readout_citedpaper(reference,Name):
@@ -74,19 +75,20 @@ def process_references(references):
 def main():
     search_query = "de%20%3E%202020%20and%20refersto%3Aauthor%3AK.Tobioka.1"
     url = create_query_url(search_query)
+    print(url)
     result = fetch_inspirehep_papers(url)
-    #json_dict = json.loads(result)
-    #references = json_dict["hits"]["hits"]
+    json_dict = json.loads(result)
+    references = json_dict["hits"]["hits"]
     
     # Save json_dict to a file
     #with open('output.json', 'w') as json_file:
     #    json.dump(json_dict, json_file, indent=4)
     ########
     # Use local file for test
-    with open('test_2023-08-13.json') as f:
-        data = json.load(f)
-    json_dict = data 
-    references = json_dict["hits"]["hits"]
+    #with open('test_2023-08-13.json') as f:
+    #    data = json.load(f)
+    #json_dict = data 
+    #references = json_dict["hits"]["hits"]
     ########
 
     process_references(references)
@@ -96,11 +98,17 @@ if __name__ == "__main__":
     main()
 
 
+#issue1: Search query & API issue
+# picks up old papers like 2022 even if the last 7 days was supposed to be searched. 
+# Is query "mostrecent" an issue? Is filtering the last xx days working? How the date restriction work?
+# 
+#Is should pick up as in 
+# https://inspirehep.net/authors/1198400?ui-citation-summary=true&ui-exclude-self-citations=true
 
-#issue 1: 
-# Ref 7 has strange input in the "raw_refs". 
-# Instead of reading this, read "title" and "label". 
-
-#issue 2:
-#check search query. Strange refereces are included. 
-# Also check if the date range works. 
+# issue2  The following one appears, but I can't find my paper in their reference (check the paper more detail)
+# Ref98
+# Title: Gauge/string duality for strong interactions
+# Link: https://inspirehep.net/literature/2149295
+# Authors:  ['Rigatos, Konstantinos Christos']
+# Cited ref:  Tobioka, K. not found. Possibly a big collaboration paper.
+# 
