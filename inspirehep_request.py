@@ -76,7 +76,7 @@ def process_references(references, author_name):
 def main():
     author_id = "K.Tobioka.1"
     author_name = "Tobioka, K."
-    url = create_query_url(author_id, past_days=70, max_results=100)
+    url = create_query_url(author_id, past_days=7, max_results=100)
     print(url)
     result = fetch_inspirehep_papers(url)
     json_dict = json.loads(result)
@@ -89,3 +89,6 @@ if __name__ == "__main__":
 
 #for improvements
 # Nice to unify two inputs to one. e.g. generate Tobioka, K. from K.Tobioka.1  
+#  https://inspirehep.net/api/literature?q=de+%3E+2023-08-27+and+refersto%3Aauthor%3AK.Tobioka.1&size=100&page=1&sort=mostrecent
+# #https://inspirehep.net/api/literature?q=de+%3E+2023-08-27+and+refersto%3Aauthor%3AK.Tobioka.1&size=100&page=1&sort=mostrecent
+
