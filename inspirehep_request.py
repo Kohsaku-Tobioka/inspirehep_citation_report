@@ -41,7 +41,7 @@ def readout_citedpaper(reference,Name):
     return output_myref
 
 
-def process_references(references):
+def process_references(references,Auther_Name):
     n_paper=len(references)
     print("Number of citations are "+str(n_paper) +" in the last 7 days")
 
@@ -60,10 +60,10 @@ def process_references(references):
         else:
             print('keys: authors/corporate_author not found')
 
-        cited_refs = readout_citedpaper(reference,"Tobioka, K.")
+        cited_refs = readout_citedpaper(reference,Auther_Name)
         
         if cited_refs ==[]:
-            print("Cited ref: ", "Tobioka, K."+" not found. Possibly a big collaboration paper. ")
+            print("Cited ref: ", Auther_Name+" not found. Possibly a big collaboration paper. ")
         else: 
             print("Cited ref: ", cited_refs)
         
@@ -71,8 +71,12 @@ def process_references(references):
 
 
 
+
+
 def main():
-    url= create_query_url("K.Tobioka.1", pastdays=7)
+    a_id="K.Tobioka.1"
+    a_name="Tobioka, K."
+    url= create_query_url(a_id, pastdays=70, max_results=100)
     print(url)
     result = fetch_inspirehep_papers(url)
     json_dict = json.loads(result)
@@ -89,7 +93,7 @@ def main():
     #references = json_dict["hits"]["hits"]
     ########
 
-    process_references(references)
+    process_references(references,a_name)
 
 
 if __name__ == "__main__":
