@@ -5,16 +5,14 @@ import json
 #https://inspirehep.net/authors/1198400?ui-citation-summary=true&ui-exclude-self-citations=true
 def create_query_url(search_query, max_results=10, page=1, sort_order='mostrecent', pastdays=7):
     base_url = 'https://inspirehep.net/api/literature?'
-    query = f'q={search_query}'
+    query = f'{search_query}'
     max_results = f'size={max_results}'
     page = f'page={page}'
     sort_order = f'sort={sort_order}'
     day_start=(datetime.date.today() - datetime.timedelta(days=pastdays)).strftime("%Y-%m-%d")
-    dates='de%20>%202023-08-20'#f'de%20>%20{day_start}'
-    url = f'{base_url}{query}&{max_results}&{page}&{sort_order}'
-    #url = f'{base_url}{query}&{max_results}&{page}&{sort_order}%20and%20{dates}'
+    dates=f'q=de%20>%20{day_start}'
+    url = f'{base_url}{dates}%20and%20{query}&{max_results}&{page}&{sort_order}'
     return url
-
 
 def fetch_inspirehep_papers(url):
     response = requests.get(url)
@@ -74,7 +72,7 @@ def process_references(references):
 
 
 def main():
-    search_query = "de%20>%202023-08-19%20and%20refersto%3Aauthor%3AK.Tobioka.1"
+    search_query = "refersto%3Aauthor%3AK.Tobioka.1"
     url = create_query_url(search_query)
     print(url)
     result = fetch_inspirehep_papers(url)
