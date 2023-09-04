@@ -1,5 +1,5 @@
 
-function createQueryUrl(authorIdentifier, maxResults = 10, page = 1, sortOrder = 'mostrecent', pastDays = 7) {
+function createQueryUrl(authorIdentifier, maxResults = 10, pastDays = 7, page = 1, sortOrder = 'mostrecent') {
     const currentDate = new Date();
     currentDate.setDate(currentDate.getDate() - pastDays);
     const dayStart = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
@@ -48,43 +48,55 @@ function readoutCitedPaper(reference, name) {
     return outputMyref;
 }
 
+// ... [rest of your existing code]
+
 function processReferences(references, authorName) {
-    Logger.log(`Number of citations are ${references.length} in the last 7 days`);
+    let output = `Number of citations are ${references.length} in the last 7 days\n\n`;
 
     references.forEach((reference, index) => {
         const title = reference.metadata.titles[0].title;
         const id = reference.id;
-        Logger.log(`\nRef${index + 1}`);
-        Logger.log(`Title: ${title}`);
-        Logger.log(`Link: https://inspirehep.net/literature/${id}`);
+        output += `\nRef${index + 1}\n`;
+        output += `Title: ${title}\n`;
+        output += `Link: https://inspirehep.net/literature/${id}\n\n`;
 
         if (reference.metadata.authors) {
             const authorFullNames = reference.metadata.authors.map(author => author.full_name);
-            Logger.log(`Authors: ${authorFullNames}`);
+            output += `Authors: ${authorFullNames}\n`;
         } else if (reference.metadata.corporate_author) {
-            Logger.log(`Corporate_author: ${reference.metadata.corporate_author}`);
+            output += `Corporate_author: ${reference.metadata.corporate_author}\n`;
         } else {
-            Logger.log('Keys: authors/corporate_author not found');
+            output += 'Keys: authors/corporate_author not found\n';
         }
 
         const citedRefs = readoutCitedPaper(reference, authorName);
 
         if (citedRefs.length === 0) {
-            Logger.log(`Cited ref: ${authorName} not found. Possibly a big collaboration paper.`);
+            output += `Cited ref: ${authorName} not found. Possibly a big collaboration paper.\n`;
         } else {
-            Logger.log(`Cited ref: ${citedRefs.join(', ')}`);
+            output += `Cited ref: ${citedRefs.join(', ')}\n`;
         }
+    });
+
+    return output;
+}
+
+function sendEmails(message) {
+    var emailAddress = 'ktobioka@fsu.edu';
+    var subject = 'Inspire Citation Report';
+    MailApp.sendEmail(emailAddress, subject, message, {
+      body: message,
     });
 }
 
 function main() {
     const authorId = "K.Tobioka.1";
     const authorName = "Tobioka, K.";
-    const url = createQueryUrl(authorId, 100);
-    console.log(url)
+    const url = createQueryUrl(authorId, 100, 7);
     const result = fetchInspirehepPapers(url);
     const jsonDict = JSON.parse(result);
     const references = jsonDict.hits.hits;
-    processReferences(references, authorName);
+    
+    const message = processReferences(references, authorName);
+    sendEmails(message);
 }
-
