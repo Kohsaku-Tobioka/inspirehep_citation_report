@@ -50,13 +50,13 @@ function readoutCitedPaper(reference, name) {
 
 // ... [rest of your existing code]
 
-function processReferences(references, authorName) {
-    let output = `Number of citations are ${references.length} in the last 7 days\n\n`;
+function processReferences(references, authorName, pastDays) {
+    let output = `Number of citations are ${references.length} in the last ${pastDays} days.\n\n`;
 
     references.forEach((reference, index) => {
         const title = reference.metadata.titles[0].title;
         const id = reference.id;
-        output += `\nRef${index + 1}\n`;
+        output += `\n[Citation ${index + 1}]\n`;
         output += `Title: ${title}\n`;
         output += `Link: https://inspirehep.net/literature/${id}\n\n`;
 
@@ -92,11 +92,12 @@ function sendEmails(message) {
 function main() {
     const authorId = "K.Tobioka.1";
     const authorName = "Tobioka, K.";
-    const url = createQueryUrl(authorId, 100, 7);
+    const pastDays = 14; 
+    const url = createQueryUrl(authorId, 100, pastDays);
     const result = fetchInspirehepPapers(url);
     const jsonDict = JSON.parse(result);
     const references = jsonDict.hits.hits;
     
-    const message = processReferences(references, authorName);
+    const message = processReferences(references, authorName, pastDays);
     sendEmails(message);
 }
