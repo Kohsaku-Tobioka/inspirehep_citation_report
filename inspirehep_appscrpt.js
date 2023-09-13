@@ -1,3 +1,4 @@
+//Code made by
 
 function createQueryUrl(authorIdentifier, maxResults = 10, pastDays = 7, page = 1, sortOrder = 'mostrecent') {
     const currentDate = new Date();
@@ -48,7 +49,6 @@ function readoutCitedPaper(reference, name) {
     return outputMyref;
 }
 
-// ... [rest of your existing code]
 
 function processReferences(references, authorName, pastDays) {
     let output = `Number of citations are ${references.length} in the last ${pastDays} days.\n\n`;
@@ -58,16 +58,17 @@ function processReferences(references, authorName, pastDays) {
         const id = reference.id;
         output += `\n[Citation ${index + 1}]\n`;
         output += `Title: ${title}\n`;
-        output += `Link: https://inspirehep.net/literature/${id}\n\n`;
 
         if (reference.metadata.authors) {
             const authorFullNames = reference.metadata.authors.map(author => author.full_name);
-            output += `Authors: ${authorFullNames}\n`;
+            output += `Authors: ${authorFullNames.join(',  ')}\n`;  // Note the two spaces after the comma
         } else if (reference.metadata.corporate_author) {
             output += `Corporate_author: ${reference.metadata.corporate_author}\n`;
         } else {
             output += 'Keys: authors/corporate_author not found\n';
         }
+
+        output += `Link: https://inspirehep.net/literature/${id}\n`;
 
         const citedRefs = readoutCitedPaper(reference, authorName);
 
@@ -81,8 +82,9 @@ function processReferences(references, authorName, pastDays) {
     return output;
 }
 
+
 function sendEmails(message) {
-    var emailAddress = 'ktobioka@fsu.edu';
+    var emailAddress = 'tobiokande@gmail.com';
     var subject = 'Inspire Citation Report';
     MailApp.sendEmail(emailAddress, subject, message, {
       body: message,
