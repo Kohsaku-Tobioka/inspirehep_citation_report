@@ -1,4 +1,34 @@
-//Code made by
+
+
+var authorId = "K.Tobioka.1";
+var authorName = "Tobioka, K.";
+var pastDays = 7; 
+var emailAddress = "ktobioka@fsu.edu";
+
+
+function main(inputAuthorId, inputAuthorName, inputPastDays, inputEmailAddress) {
+    // Use provided values or default ones
+    authorId = inputAuthorId || authorId;
+    authorName = inputAuthorName || authorName;
+    pastDays = inputPastDays || pastDays;
+    emailAddress = inputEmailAddress || emailAddress;
+
+    const url = createQueryUrl(authorId, 100, pastDays);
+    const result = fetchInspirehepPapers(url);
+    const jsonDict = JSON.parse(result);
+    const references = jsonDict.hits.hits;
+    
+    const message = processReferences(references, authorName, pastDays);
+    sendEmails(message, emailAddress);
+}
+
+
+function sendEmails(message, emailAddress) {
+    var subject = 'Inspire Citation Report';
+    MailApp.sendEmail(emailAddress, subject, message, {
+      body: message,
+    });
+}
 
 function createQueryUrl(authorIdentifier, maxResults = 10, pastDays = 7, page = 1, sortOrder = 'mostrecent') {
     const currentDate = new Date();
@@ -83,23 +113,4 @@ function processReferences(references, authorName, pastDays) {
 }
 
 
-function sendEmails(message) {
-    var emailAddress = 'tobiokande@gmail.com';
-    var subject = 'Inspire Citation Report';
-    MailApp.sendEmail(emailAddress, subject, message, {
-      body: message,
-    });
-}
 
-function main() {
-    const authorId = "K.Tobioka.1";
-    const authorName = "Tobioka, K.";
-    const pastDays = 14; 
-    const url = createQueryUrl(authorId, 100, pastDays);
-    const result = fetchInspirehepPapers(url);
-    const jsonDict = JSON.parse(result);
-    const references = jsonDict.hits.hits;
-    
-    const message = processReferences(references, authorName, pastDays);
-    sendEmails(message);
-}
