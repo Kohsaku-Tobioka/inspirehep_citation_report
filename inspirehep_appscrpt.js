@@ -1,19 +1,21 @@
-
-
 var authorId = "K.Tobioka.1";
 var authorName = "Tobioka, K.";
 var pastDays = 7; 
 var emailAddress = "ktobioka@fsu.edu";
 
 
+
+
+
 function main(inputAuthorId, inputAuthorName, inputPastDays, inputEmailAddress) {
     // Use provided values or default ones
-    authorId = inputAuthorId || authorId;
+    //authorId = inputAuthorId || authorId0;
     authorName = inputAuthorName || authorName;
     pastDays = inputPastDays || pastDays;
     emailAddress = inputEmailAddress || emailAddress;
 
     const url = createQueryUrl(authorId, 100, pastDays);
+    console.log(url)
     const result = fetchInspirehepPapers(url);
     const jsonDict = JSON.parse(result);
     const references = jsonDict.hits.hits;
@@ -48,7 +50,6 @@ function createQueryUrl(authorIdentifier, maxResults = 10, pastDays = 7, page = 
     const base_url = 'https://inspirehep.net/api/literature?';
 
     return base_url + queryString;
-    console
 }
 
 function fetchInspirehepPapers(url) {
