@@ -34,18 +34,21 @@ function createQueryUrl(authorIdentifier, maxResults = 10, pastDays = 7, page = 
     const currentDate = new Date();
     currentDate.setDate(currentDate.getDate() - pastDays);
     const dayStart = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
-    
+        
     const params = {
-        q: `de+%3E+${dayStart}+and+refersto%3Aauthor%3A${authorIdentifier}`,
+        q: `de > ${dayStart} and refersto:author:${authorIdentifier}`,
         size: maxResults,
         page: page,
         sort: sortOrder
     };
 
-    const queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
+    const queryString = Object.keys(params)
+                              .map(key => `${key}=${encodeURIComponent(params[key])}`)
+                              .join('&');
     const base_url = 'https://inspirehep.net/api/literature?';
 
     return base_url + queryString;
+    console
 }
 
 function fetchInspirehepPapers(url) {
@@ -98,7 +101,7 @@ function processReferences(references, authorName, pastDays) {
             output += 'Keys: authors/corporate_author not found\n';
         }
 
-        output += `Link: https://inspirehep.net/literature/${id}\n`;
+        output += `Link: https://inspirehep.net/literature/${id}`+ '\n \n';
 
         const citedRefs = readoutCitedPaper(reference, authorName);
 
