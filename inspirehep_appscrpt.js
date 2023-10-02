@@ -8,8 +8,6 @@ var emailAddress = "ktobioka@fsu.edu";
 
 
 function main(inputAuthorId, inputAuthorName, inputPastDays, inputEmailAddress) {
-    // Use provided values or default ones
-    //authorId = inputAuthorId || authorId0;
     authorName = inputAuthorName || authorName;
     pastDays = inputPastDays || pastDays;
     emailAddress = inputEmailAddress || emailAddress;
