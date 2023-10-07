@@ -1,4 +1,4 @@
-# inspirehep_api_practice
+# inspirehep_citation_report
 
 This code is to set up regular emails about your HEP-inspire citation record. The code is intended to be used with Google Appscript. 
 
