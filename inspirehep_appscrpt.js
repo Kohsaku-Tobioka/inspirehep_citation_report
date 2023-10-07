@@ -1,7 +1,7 @@
 var authorId = "K.Tobioka.1";
 var authorName = "Tobioka, K.";
 var pastDays = 7; 
-var emailAddress = "ktobioka@fsu.edu";
+var emailAddress = "xxx@gmail.com";
 
 
 
