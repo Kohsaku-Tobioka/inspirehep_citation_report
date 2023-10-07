@@ -87,8 +87,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-#for improvements
-# Nice to unify two inputs to one. e.g. generate Tobioka, K. from K.Tobioka.1  
-#  https://inspirehep.net/api/literature?q=de+%3E+2023-08-27+and+refersto%3Aauthor%3AK.Tobioka.1&size=100&page=1&sort=mostrecent
-# #https://inspirehep.net/api/literature?q=de+%3E+2023-08-27+and+refersto%3Aauthor%3AK.Tobioka.1&size=100&page=1&sort=mostrecent
 
