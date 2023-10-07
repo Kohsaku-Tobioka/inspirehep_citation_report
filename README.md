@@ -1,19 +1,19 @@
 # inspirehep_api_practice
 
-This code to setup regular emails about your HEP-inpire citation record. The code is intended to be used with Google Appscript. 
+This code is to set up regular emails about your HEP-inspire citation record. The code is intended to be used with Google Appscript. 
 
 1. Open https://script.google.com/home
 
 2. Click "New Project"
 
-3. Paste this code in "Code.gs"
+3. Paste the code(inspirehep_appscrpt.js) in "Code.gs"
 
 4. Change the input parameters of the code: authorId, authorName, pastDays(default is 7 days), emailAddress
-   ![Screen Shot 2023-09-17 at 9 42 31 AM](https://github.com/Kohsaku-Tobioka/inspirehep_api_practice/assets/100147234/49e1aefc-04cd-440c-ae95-d2ba609bdd74)   
-   authorId: Go to your iNSPIRE-HEP auther page, and get "Author Identifier". In my case, it's K.Tobioka.1. Put it in "authorId"  
+   ![Screen Shot 2023-10-07 at 9 17 41 AM](https://github.com/Kohsaku-Tobioka/inspirehep_api_practice/assets/100147234/6f465b27-096d-491a-9f8e-7f9bb42bdd13)  
+   authorId: Go to your iNSPIRE-HEP author page, and get "Author Identifier". In my case, it's K.Tobioka.1. Put it in "authorId"  
    authorName: Filter the output of iNSPIRE citation results. While "Lastname, First-name-initial." tends to work, choose it as you want.  
    pastDays: put the days you want to cover from today.  
-   emailAddress:  your email address (can be the same gmail)   
+   emailAddress:  your email address (it can be the same Gmail)   
 
 6. Click "Triggers" on the left. Click "+Add Trigger" on the bottom right.
 
