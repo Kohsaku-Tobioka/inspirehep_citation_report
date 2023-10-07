@@ -7,7 +7,7 @@ var emailAddress = "ktobioka@fsu.edu";
 
 
 
-function main(inputAuthorId, inputAuthorName, inputPastDays, inputEmailAddress) {
+function main(inputAuthorName, inputPastDays, inputEmailAddress) {
     authorName = inputAuthorName || authorName;
     pastDays = inputPastDays || pastDays;
     emailAddress = inputEmailAddress || emailAddress;
