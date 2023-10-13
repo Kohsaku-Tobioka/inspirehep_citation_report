@@ -93,7 +93,12 @@ function processReferences(references, authorName, pastDays) {
 
         if (reference.metadata.authors) {
             const authorFullNames = reference.metadata.authors.map(author => author.full_name);
-            output += `Authors: ${authorFullNames.join(',  ')}\n`;  // Note the two spaces after the comma
+            // Check if the number of authors exceeds 10
+            if (authorFullNames.length > 10) {
+                output += `Authors: ${authorFullNames[0]} et al.\n`; // Output the first author and "et al."
+            } else {
+                output += `Authors: ${authorFullNames.join(',  ')}\n`;  // Note the two spaces after the comma
+            }
         } else if (reference.metadata.corporate_author) {
             output += `Corporate_author: ${reference.metadata.corporate_author}\n`;
         } else {
@@ -113,6 +118,4 @@ function processReferences(references, authorName, pastDays) {
 
     return output;
 }
-
-
 
